@@ -1,4 +1,3 @@
-
 class Node:
 
     def __init__(self, key):
@@ -133,8 +132,8 @@ def pathToNode(root, path, k):
     if root is None:
         return False
  
-    path.append(root.data)
-    if root.data == k :
+    path.append(root.key)
+    if root.key == k :
         return True
 
     if ((root.left != None and pathToNode(root.left, path, k)) or
@@ -176,5 +175,10 @@ import time
 start = time.perf_counter()
 root = deleteNode(root, 20)
 print(time.perf_counter()-start)
+
+start = time.perf_counter()
+dist = distance(root, 4, 6)
+print(time.perf_counter()-start)
+
 
 print(root.find_val(7))
