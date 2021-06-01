@@ -17,15 +17,16 @@ class Node:
                 return str(lkpval)+" Not Found"
             return self.right.find_val(lkpval)
         else:
-            print(str(self.key) + ' is found')
+            a=1
+            #print(str(self.key) + ' is found')
    
 # Print the tree
     def print_tree(self):
         if self.left:
-            self.left.PrintTree()
-        print(self.key),
+            self.left.print_tree()
+        #print(self.key),
         if self.right:
-            self.right.PrintTree()
+            self.right.print_tree()
  
 def minValueNode(node):
     current = node
@@ -42,8 +43,7 @@ def inorder(root):
         print(root.key, end=" ")
         inorder(root.right)
  
-# A utility function to insert a
-# new node with given key in BST
+#
 def insert(node, key):
  
     if node is None:
@@ -57,18 +57,13 @@ def insert(node, key):
     # return the (unchanged) node pointer
     return node
  
- 
-# Given a binary search tree
-# and a key, this function
-# delete the key and returns the new root
+
 def deleteNode(root, key):
  
     # Base Case
     if root is None:
         return root
- 
-    # Recursive calls for ancestors of
-    # node to be deleted
+
     if key < root.key:
         root.left = deleteNode(root.left, key)
         return root
@@ -76,16 +71,11 @@ def deleteNode(root, key):
     elif(key > root.key):
         root.right = deleteNode(root.right, key)
         return root
- 
-    # We reach here when root is the node
-    # to be deleted.
-     
-    # If root node is a leaf node
+      
      
     if root.left is None and root.right is None:
           return None
  
-    # If one of the children is empty
  
     if root.left is None:
         temp = root.right
@@ -97,11 +87,9 @@ def deleteNode(root, key):
         root = None
         return temp
  
-    # If both children exist
  
     succParent = root
  
-    # Find Successor
  
     succ = root.right
  
@@ -109,12 +97,7 @@ def deleteNode(root, key):
         succParent = succ
         succ = succ.left
  
-    # Delete successor.Since successor
-    # is always left child of its parent
-    # we can safely make successor's right
-    # right child as left of its parent.
-    # If there is no succ, then assign
-    # succ->right to succParent->right
+
     if succParent != root:
         succParent.left = succ.right
     else:
@@ -162,23 +145,52 @@ def distance(root, data1, data2):
         return 0
 
 
+def creating_ht(n):
 
-import sys
-sys.setrecursionlimit(10**6)
+    root = None
+    for i in range(n):
+        root = insert(root, i)    
+    return root
 
-root = None
-for i in range(0, 1_000):
-    from random import randint
-    root = insert(root, i)    
+def benchmark():
+    from timeit import default_timer as timer
 
-import time
-start = time.perf_counter()
-root = deleteNode(root, 20)
-print(time.perf_counter()-start)
+    for i in range(0, 2):
+        n=(10**(i+3))
+	
+        ht = creating_ht(n)
+        start = timer()
+        ht=insert(ht, 500)
+        end = timer()
+        print("Insertion time: {} sec".format(end-start) + " of {} nums.".format(n))
 
-start = time.perf_counter()
-dist = distance(root, 4, 6)
-print(time.perf_counter()-start)
+        start = timer()
+        ht = deleteNode(ht, 20)
+        end = timer()
+        print("Removing time: {} sec".format(end-start) + " of {} nums.".format(n))
 
+        start = timer()
+        ht.find_val(7)
+        end = timer()
+        print("Searcing time: {} sec".format(end-start) + " of {} nums.".format(n))
 
-print(root.find_val(7))
+        start = timer()
+        dist = distance(ht, n/3, 2*n/3)
+        end = timer()
+        print("Find distance time: {} sec".format(end-start) + " of {} nums.".format(n))
+
+        start = timer()
+        ht.print_tree()
+        end = timer()
+        print("Graph traversal time: {} sec".format(end-start) + " of {} nums.".format(n))
+
+        start = timer()
+        a  = minValueNode(ht)    
+        end = timer()
+        print("Find min time: {} sec".format(end-start) + " of {} nums.".format(n))
+
+if __name__=="__main__":
+    import sys
+    sys.setrecursionlimit(10**9)
+    benchmark()
+ 
